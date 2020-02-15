@@ -68,6 +68,20 @@ Vue.component('product', {
             </button>
 
         </div>
+        
+        <div class="flex-container-column">
+            <h2>Reviews</h2>
+            <p v-if="reviews.length === 0">There are no reviews yet</p>
+            <ul>
+                <li v-for="review in reviews">
+                    <p>{{review.name}}</p>
+                    <p>{{review.rating}}</p>
+                    <p>{{review.review}}</p>
+                </li>
+            </ul>
+        
+        <product-review @review-submitted="addReview"></product-review>    
+        </div>
     </div>
     `,
     // In Components 'data' is a function that returns a data object. (In new Vue it is just a data object)
@@ -102,7 +116,8 @@ Vue.component('product', {
             ],
             styleObject: {
                 color: 'red'
-            }
+            },
+            reviews: []
         }
     },
     methods: {
@@ -116,6 +131,9 @@ Vue.component('product', {
             //'this' refers to the cart in the 'data' property
             this.selectedVariant = index;
             console.log('Image index: ' + index)
+        },
+        addReview(productReview) {
+            this.reviews.push(productReview)
         }
     },
     // Computed Properties are cached - The result is saved until its properties (here brand or product) change.
@@ -139,6 +157,79 @@ Vue.component('product', {
         }
     }
 
+});
+
+Vue.component('product-review', {
+    //'v-model' allows two way data binding (From the input (template) to the data and vice versa)
+    //Note: 'v-bind' or just ':' is only for one way binding from the data to the template
+    template: `
+        <!-- The event listener @submit will trigger a method onSubmit 
+        The event modifier '.prevent' prevents the default behaviour -> The page wont refresh when the form is submitted -->
+        <form class="review-form" @submit.prevent="onSubmit">
+        
+        <p v-if="errors.length">
+          <b>Please correct the following error(s):</b>
+          <ul>
+            <li v-for="error in errors"> {{error}}</li>
+          </ul>
+        </p>
+          <p>
+            <label for="name">Name:</label>
+            <input id="name" v-model="name" placeholder="name">
+          </p>
+          
+          <p>
+            <label for="review">Review:</label>      
+            <textarea id="review" v-model="review"></textarea>
+          </p>
+          
+          <p>
+            <label for="rating">Rating:</label>
+            <!-- 'number' is a modifier that makes sure to typecast this value as a number -->
+            <select id="rating" v-model.number="rating">
+              <option>5</option>
+              <option>4</option>
+              <option>3</option>
+              <option>2</option>
+              <option>1</option>
+            </select>
+          </p>
+              
+          <p>
+            <input type="submit" value="Submit">  
+          </p>    
+        
+        </form>
+    `,
+    data() {
+        return {
+            name: null,
+            review: null,
+            rating: null,
+            errors: []
+        }
+    },
+    methods: {
+        onSubmit() {
+            this.errors = [];
+            if (this.name && this.review && this.rating) {
+                let productReview = {
+                    name: this.name,
+                    review: this.review,
+                    rating: this.rating
+                };
+                this.$emit('review-submitted', productReview)
+                //And also reset the values
+                this.name = null;
+                this.review = null;
+                this.rating = null;
+            } else  {
+                if (!this.name) this.errors.push("Name required.");
+                if (!this.review) this.errors.push("Review required.");
+                if (!this.rating) this.errors.push("Rating required.");
+            }
+        }
+    }
 });
 
 //'new Vue' creates a new Vue instance which is the root of a Vue application
