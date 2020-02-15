@@ -36,8 +36,8 @@
             <div class="flex-container">
                 <span class="dot" id="green" v-if="inStock"></span>
                 <span class="dot" id="red" v-else="inStock"></span>
-                <span class="product-stock" v-if="inventory > 10">In Stock</span>
-                <span class="product-stock" v-else-if="inventory <= 10 && inventory > 0">Almost sold out</span>
+                <span class="product-stock" v-if="inStock > 10">In Stock</span>
+                <span class="product-stock" v-else-if="inStock <= 10 && inStock > 0">Almost sold out</span>
                 <span class="product-stock" v-else>Out of Stock</span>
             </div>
             <!-- 4. LIST RENDERING -->
@@ -51,11 +51,11 @@
             <!-- Inside the 'style' attribute we are adding an object via the curly brackets '{ }' -->
             <!-- Often it is cleaner to bind to an entire style Object
             e.g.: <span :style="styleObject"></span> Then inside define that css inside the data styleObject of main.js-->
-            <div v-for="variant in variants"
+            <div v-for="(variant, index) in variants"
                  :key="variant.variantId"
                  class="color-box"
                  :style="{backgroundColor: variant.variantColor}"
-                 @mouseover="updateProduct(variant.variantImage)">
+                 @mouseover="updateProduct(index)">
                 <!-- The short form for 'v-on' is '@' -->
                 <!-- Other common use cases: @click, @submit on a form, @keyup.enter on an input, ... -->
             </div>

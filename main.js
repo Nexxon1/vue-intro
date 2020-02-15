@@ -11,20 +11,20 @@ var app = new Vue({
         //The instance data is linked to every place that data is being referenced in the HTML
         product: 'Socks',
         brand: 'Gucci',
-        socksImage: './assets/vmSocks-green-onWhite.jpg',
-        inStock: true,
-        inventory: 11,
         details: ["80% cotton", "20% polyester", "Gender-neutral"],
+        selectedVariant: 0, //Based on the index of the variants list
         variants: [
             {
                 variantId: 2234,
                 variantColor: "green",
-                variantImage: './assets/vmSocks-green-onWhite.jpg'
+                variantImage: './assets/vmSocks-green-onWhite.jpg',
+                variantQuantity: 11
             },
             {
                 variantId: 2235,
                 variantColor: "blue",
-                variantImage: './assets/vmSocks-blue-onWhite.jpg'
+                variantImage: './assets/vmSocks-blue-onWhite.jpg',
+                variantQuantity: 0
             }
         ],
         cart: 0,
@@ -38,8 +38,9 @@ var app = new Vue({
             this.cart += 1
         },
         //This is the ES6 short form for anonymous functions
-        updateProduct(variantImage) {
-            this.socksImage = variantImage;
+        updateProduct(index) {
+            this.selectedVariant = index;
+            console.log('Image index: ' + index)
         }
     },
     // Computed Properties are cached - The result is saved until its properties (here brand or product) change.
@@ -48,6 +49,12 @@ var app = new Vue({
     computed: {
         title() {
             return this.brand + ' ' + this.product
+        },
+        socksImage() {
+            return this.variants[this.selectedVariant].variantImage
+        },
+        inStock() {
+            return this.variants[this.selectedVariant].variantQuantity
         }
     }
 });
