@@ -10,72 +10,7 @@
 <div class="nav-bar"></div>
 
 <div id="app">
-    <div class="product">
-
-        <div class="product-image">
-            <!-- 2. ATTRIBUTE BINDING -->
-            <!-- static solution: <img src="./assets/vmSocks-green-onWhite.jpg"> -->
-            <!--'v-bind' dynamically binds an attribute to an expression
-                 Here we bind to the attribute 'src' to the expression 'socksImage'
-                 This works for many other attributes - e.g. href, title, style, disabled, ... -->
-            <img v-bind:src="socksImage">
-            <!-- There is also a short form for v-bind -> Just prepend ':' -->
-            <!-- <img :src="socksImage"> -->
-        </div>
-
-        <div class="product-info">
-            <!-- 1. THE VUE INSTANCE -->
-            <!-- <h1>{{product}}</h1> -->
-            <!-- 7. COMPUTED PROPERTIES -->
-            <h1>{{title}}</h1>
-            <div>
-                I can reference the same data here: {{product}}
-            </div>
-            <!-- 3. CONDITIONAL RENDERING -->
-            <!-- 'v-show' just toggles the visibility on and off (adds CSS property 'display: none'-->
-            <div class="flex-container">
-                <span class="dot" id="green" v-if="inStock"></span>
-                <span class="dot" id="red" v-else="inStock"></span>
-                <span class="product-stock" v-if="inStock > 10">In Stock</span>
-                <span class="product-stock" v-else-if="inStock <= 10 && inStock > 0">Almost sold out</span>
-                <span class="product-stock" v-else>Out of Stock</span>
-            </div>
-            <!-- 4. LIST RENDERING -->
-            <ul>
-                <li v-for="detail in details">{{detail}}</li>
-            </ul>
-            <!-- With a more complex collection -->
-            <!-- The ':key' Attribute is not necessary but highly recommended so Vue can keep track of each
-            nodes identity -->
-            <!-- 6. class and STYLE BINDING -->
-            <!-- Inside the 'style' attribute we are adding an object via the curly brackets '{ }' -->
-            <!-- Often it is cleaner to bind to an entire style Object
-            e.g.: <span :style="styleObject"></span> Then inside define that css inside the data styleObject of main.js-->
-            <div v-for="(variant, index) in variants"
-                 :key="variant.variantId"
-                 class="color-box"
-                 :style="{backgroundColor: variant.variantColor}"
-                 @mouseover="updateProduct(index)">
-                <!-- The short form for 'v-on' is '@' -->
-                <!-- Other common use cases: @click, @submit on a form, @keyup.enter on an input, ... -->
-            </div>
-
-            <!-- 5. EVENT HANDLING & 6. CLASS and style BINDING-->
-            <!-- 'v-on' listens to the event that you specify afterwards. -->
-            <!-- <button v-on:click="cart += 1">Add to Cart</button> -->
-            <!-- You can also trigger methods with the 'methods' property of the Vue object. -->
-            <button v-on:click="addToCart"
-                    :disabled="!inStock"
-                    :class="{disabledButton: !inStock}">
-                Add to Cart
-            </button>
-
-            <div class="cart">
-                <p>Cart ({{cart}})</p>
-            </div>
-
-        </div>
-    </div>
+    <product :premium="premium"></product>
 </div>
 
 
