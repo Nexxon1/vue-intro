@@ -67,10 +67,6 @@ Vue.component('product', {
                 Add to Cart
             </button>
 
-            <div class="cart">
-                <p>Cart ({{cart}})</p>
-            </div>
-
         </div>
     </div>
     `,
@@ -104,7 +100,6 @@ Vue.component('product', {
                     variantQuantity: 0
                 }
             ],
-            cart: 0,
             styleObject: {
                 color: 'red'
             }
@@ -112,11 +107,13 @@ Vue.component('product', {
     },
     methods: {
         addToCart: function () {
-            //'this' refers to the cart in the 'data' property
-            this.cart += 1
+            // 9. COMMUNICATING EVENTS
+            //Passing Information UP
+            this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId);
         },
         //This is the ES6 short form for anonymous functions
         updateProduct(index) {
+            //'this' refers to the cart in the 'data' property
             this.selectedVariant = index;
             console.log('Image index: ' + index)
         }
@@ -150,6 +147,12 @@ var app = new Vue({
     //Element property. Connects to the HTML Element with id 'app'
     el: '#app',
     data: {
-        premium: true
+        premium: true,
+        cart: [],
+    },
+    methods: {
+        updateCart(id) {
+            this.cart.push(id)
+        }
     }
 });
