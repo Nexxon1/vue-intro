@@ -13,6 +13,8 @@
     <div class="cart">
         <p>Cart ({{cart.length}})</p>
     </div>
+    <!-- Passing the prop 'premium' down to a Vue component
+         & passing data up by emitting 'add-to-cart' -->
     <product :premium="premium" @add-to-cart="updateCart"></product>
 </div>
 

@@ -9,26 +9,20 @@ Vue.component('product', {
     <div class="product">
 
         <div class="product-image">
-            <!-- 2. ATTRIBUTE BINDING -->
-            <!-- static solution: <img src="./assets/vmSocks-green-onWhite.jpg"> -->
+            <!-- ATTRIBUTE BINDING -->
             <!--'v-bind' dynamically binds an attribute to an expression
                  Here we bind to the attribute 'src' to the expression 'socksImage'
                  This works for many other attributes - e.g. href, title, style, disabled, ... -->
             <img v-bind:src="socksImage">
             <!-- There is also a short form for v-bind -> Just prepend ':' -->
-            <!-- <img :src="socksImage"> -->
         </div>
 
         <div class="product-info">
-            <!-- 1. THE VUE INSTANCE -->
-            <!-- <h1>{{product}}</h1> -->
-            <!-- 7. COMPUTED PROPERTIES -->
+            <!-- COMPUTED PROPERTIES -->
             <h1>{{title}}</h1>
-            <div>
-                I can reference the same data here: {{product}}
-            </div>
-            <!-- 3. CONDITIONAL RENDERING -->
-            <!-- 'v-show' just toggles the visibility on and off (adds CSS property 'display: none'-->
+
+            <!-- CONDITIONAL RENDERING -->
+            <!-- 'v-show' just toggles the visibility on and off (adds CSS property 'display: none') -->
             <div class="flex-container">
                 <span class="dot" id="green" v-if="inStock"></span>
                 <span class="dot" id="red" v-else="inStock"></span>
@@ -37,17 +31,18 @@ Vue.component('product', {
                 <span class="product-stock" v-else>Out of Stock</span>
             </div>
             <p>Shipping: {{shipping}}</p>
-            <!-- 4. LIST RENDERING -->
+
+            <!-- LIST RENDERING -->
             <ul>
                 <li v-for="detail in details">{{detail}}</li>
             </ul>
-            <!-- With a more complex collection -->
+
+            <!-- List rendering with a more complex collection -->
             <!-- The ':key' Attribute is not necessary but highly recommended so Vue can keep track of each
             nodes identity -->
-            <!-- 6. class and STYLE BINDING -->
-            <!-- Inside the 'style' attribute we are adding an object via the curly brackets '{ }' -->
-            <!-- Often it is cleaner to bind to an entire style Object
-            e.g.: <span :style="styleObject"></span> Then inside define that css inside the data styleObject of main.js-->
+            <!-- STYLE BINDING: Inside the 'style' attribute we are adding an object via the curly brackets '{ }'
+            Often it is cleaner to bind to an entire style Object
+            e.g.: <span :style="styleObject"></span> Then inside define that css inside the data styleObject of main.js -->
             <div v-for="(variant, index) in variants"
                  :key="variant.variantId"
                  class="color-box"
@@ -57,7 +52,7 @@ Vue.component('product', {
                 <!-- Other common use cases: @click, @submit on a form, @keyup.enter on an input, ... -->
             </div>
 
-            <!-- 5. EVENT HANDLING & 6. CLASS and style BINDING-->
+            <!-- (more) EVENT HANDLING & CLASS BINDING-->
             <!-- 'v-on' listens to the event that you specify afterwards. -->
             <!-- <button v-on:click="cart += 1">Add to Cart</button> -->
             <!-- You can also trigger methods with the 'methods' property of the Vue object. -->
@@ -74,13 +69,13 @@ Vue.component('product', {
             <p v-if="reviews.length === 0">There are no reviews yet</p>
             <ul>
                 <li v-for="review in reviews">
-                    <p>{{review.name}}</p>
-                    <p>{{review.rating}}</p>
-                    <p>{{review.review}}</p>
+                    <p>Name: {{review.name}}</p>
+                    <p>Rating: {{review.rating}}</p>
+                    <p>Review: {{review.review}}</p>
                 </li>
             </ul>
         
-        <product-review @review-submitted="addReview"></product-review>    
+            <product-review @review-submitted="addReview"></product-review>
         </div>
     </div>
     `,
@@ -94,8 +89,8 @@ Vue.component('product', {
     // In order to receive props a component needs to explicitly declare the props it expects to receive
     data() {
         return {
-            //Vue is reactive - if this value changes the according HTML places change too
-            //The instance data is linked to every place that data is being referenced in the HTML
+            // Vue is reactive - if this value changes the according HTML places change too
+            // The instance data is linked to every place that data is being referenced in the HTML
             product: 'Socks',
             brand: 'Gucci',
             details: ["80% cotton", "20% polyester", "Gender-neutral"],
@@ -122,13 +117,13 @@ Vue.component('product', {
     },
     methods: {
         addToCart: function () {
-            // 9. COMMUNICATING EVENTS
-            //Passing Information UP
+            // COMMUNICATING EVENTS
+            // Passing Information UP
             this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId);
         },
-        //This is the ES6 short form for anonymous functions
+        // This is the ES6 short form for anonymous functions
         updateProduct(index) {
-            //'this' refers to the cart in the 'data' property
+            //'this' refers to the selectedVariant in the 'data' property
             this.selectedVariant = index;
             console.log('Image index: ' + index)
         },
@@ -137,8 +132,8 @@ Vue.component('product', {
         }
     },
     // Computed Properties are cached - The result is saved until its properties (here brand or product) change.
-    // For expensive operations that you dont want to rerun every time you access it you should use computed properties
-    // instead of a method
+    // For expensive operations that you don't want to rerun every time you access it, you should use
+    // computed properties instead of a method
     computed: {
         title() {
             return this.brand + ' ' + this.product
@@ -160,44 +155,44 @@ Vue.component('product', {
 });
 
 Vue.component('product-review', {
-    //'v-model' allows two way data binding (From the input (template) to the data and vice versa)
-    //Note: 'v-bind' or just ':' is only for one way binding from the data to the template
     template: `
         <!-- The event listener @submit will trigger a method onSubmit 
         The event modifier '.prevent' prevents the default behaviour -> The page wont refresh when the form is submitted -->
         <form class="review-form" @submit.prevent="onSubmit">
         
-        <p v-if="errors.length">
-          <b>Please correct the following error(s):</b>
-          <ul>
-            <li v-for="error in errors"> {{error}}</li>
-          </ul>
-        </p>
+            <p v-if="errors.length">
+                <b>Please correct the following error(s):</b>
+                <ul>
+                    <li v-for="error in errors"> {{error}}</li>
+                </ul>
+            </p>
+            <!-- 'v-model' allows two way data binding (From the input (template) to the data and vice versa) -->
+            <!-- Note: 'v-bind' or just ':' is only for one way binding from the data to the template -->
+            <p>
+                <label for="name">Name:</label>
+                <input id="name" v-model="name">
+            </p>
+
+            <p>
+                <label for="review">Review:</label>
+                <textarea id="review" v-model="review"></textarea>
+            </p>
+
+            <p>
+                <label for="rating">Rating:</label>
+                <!-- 'number' is a modifier that makes sure to typecast this value as a number -->
+                <select id="rating" v-model.number="rating">
+                    <option>5</option>
+                    <option>4</option>
+                    <option>3</option>
+                    <option>2</option>
+                    <option>1</option>
+                </select>
+            </p>
+
           <p>
-            <label for="name">Name:</label>
-            <input id="name" v-model="name" placeholder="name">
+            <input type="submit" value="Submit">
           </p>
-          
-          <p>
-            <label for="review">Review:</label>      
-            <textarea id="review" v-model="review"></textarea>
-          </p>
-          
-          <p>
-            <label for="rating">Rating:</label>
-            <!-- 'number' is a modifier that makes sure to typecast this value as a number -->
-            <select id="rating" v-model.number="rating">
-              <option>5</option>
-              <option>4</option>
-              <option>3</option>
-              <option>2</option>
-              <option>1</option>
-            </select>
-          </p>
-              
-          <p>
-            <input type="submit" value="Submit">  
-          </p>    
         
         </form>
     `,
@@ -218,6 +213,8 @@ Vue.component('product-review', {
                     review: this.review,
                     rating: this.rating
                 };
+                // COMMUNICATING EVENTS
+                // Passing Information UP (here from the 'product-review' component to the 'product' component)
                 this.$emit('review-submitted', productReview)
                 //And also reset the values
                 this.name = null;
@@ -232,16 +229,17 @@ Vue.component('product-review', {
     }
 });
 
-//'new Vue' creates a new Vue instance which is the root of a Vue application
-//The Vue instance has a variety of optional properties to store data or perform actions
+// 'new Vue' creates a new Vue instance which is the root of a Vue application
+// The Vue instance has a variety of optional properties to store data or perform actions
 var app = new Vue({
-    //Element property. Connects to the HTML Element with id 'app'
+    // Element property. Connects to the HTML Element with id 'app'
     el: '#app',
     data: {
         premium: true,
         cart: [],
     },
     methods: {
+        // This method listens to the emitted event 'add-to-cart' by the underlying Vue component
         updateCart(id) {
             this.cart.push(id)
         }
